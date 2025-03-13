@@ -1,0 +1,32 @@
+import java.util.*;
+import java.util.stream.*;
+
+class Product {
+    String category;
+    double price;
+
+    Product(String category, double price) {
+        this.category = category;
+        this.price = price;
+    }
+}
+
+public class ProcessProducts {
+    public static void main(String[] args) {
+        List<Product> products = Arrays.asList(
+            new Product("Electronics", 1200),
+            new Product("Electronics", 800),
+            new Product("Clothing", 50),
+            new Product("Clothing", 70)
+        );
+
+        Map<String, Optional<Product>> mostExpensive = products.stream()
+            .collect(Collectors.groupingBy(p -> p.category, Collectors.maxBy(Comparator.comparingDouble(p -> p.price))));
+
+        Map<String, Double> avgPrice = products.stream()
+            .collect(Collectors.groupingBy(p -> p.category, Collectors.averagingDouble(p -> p.price)));
+
+        mostExpensive.forEach((cat, prod) -> System.out.println(cat + " Most Expensive: " + prod.get().price));
+        avgPrice.forEach((cat, avg) -> System.out.println(cat + " Average Price: " + avg));
+    }
+}
